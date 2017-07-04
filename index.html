@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Platea-Timeline</title>
+    <link rel="stylesheet" href="./src/css/styles.css">
+    <script src="./bower_components/vue/dist/vue.js"></script>
+    <script src="./bower_components/p5.js/lib/p5.js"></script>
+    <script src="./bower_components/p5.js/lib/addons/p5.dom.js"></script>
+    <script src="./src/js/platea-timeline.js"></script>
+    <script src="./src/js/platea-timeline-ui.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <h1>{{title}}</h1>
+        <form>
+            <input type="text" placeholder="Name" v-model="name">
+            <input type="number" placeholder="Start Time" v-model="startTime">
+            <input type="number" placeholder="End Time" v-model="endTime">
+        </form>
+        <br>
+        <button @click="addInteraction">Add Interaction</button>
+    </div>
+</body>
+<script>
+    function pad(n, width, z) {
+        z = z || '0';
+        n = n + '';
+        return n.length >= width ?
+            n : new Array(width - n.length + 1).join(z) + n;
+    }
+
+    new Vue({
+        el: '#container',
+        data: {
+            title: 'Platea Timeline',
+            name: '',
+            startTime: 0,
+            endTime: 0,
+            counter: 0
+        },
+        methods: {
+            addInteraction: function () {
+                this.counter++;
+                window.PlateaTimeline.addInteraction(pad(this.counter, 4),
+                    this.name, 'Hotspot', parseInt(this.startTime),
+                    parseInt(this.endTime));
+            }
+        }
+    })
+
+</script>
+
+</html>

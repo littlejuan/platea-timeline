@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+body{
+    margin: 0;
+    font-family: Roboto, sans-serif;
+}
+
+.interactionButton {
+    border: none;
+    display: inline-block;
+    outline: 0;
+}
+
+canvas { 
+    position:fixed; 
+    bottom: 0;
+    left:0; 
+    z-index:1; 
+}
+
+#container { 
+    overflow: auto;
+    position:relative; 
+    z-index:2; 
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
