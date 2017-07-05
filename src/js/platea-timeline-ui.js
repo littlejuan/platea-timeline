@@ -79,8 +79,10 @@ function actionButton(event) {
 function mouseDragged() {
     try {
         if (currentSelection !== null) {
-            var button = select('#' + currentSelection);
+            var id = '#' + currentSelection;
+            var button = select(id);
             button.position(lastPos);
+            modifyP5Element(buttons, currentSelection, lastPos);
             if (isDraggable) {
                 lastPos = mouseX - 100;
                 if (lastPos < width * .18) {
@@ -93,7 +95,6 @@ function mouseDragged() {
 
     }
     catch (err) { }
-
     return false;
 }
 
@@ -101,9 +102,9 @@ function deleteInteraction(event) {
     var id = event.srcElement.id;
     id = id.split('remove')[1];
     PlateaTimeline.removeInteraction(id);
-    deleteP5Element(buttons, id, width * .18);
-    deleteP5Element(nodes, 'node' + id, 0);
-    
+    deleteP5Element(buttons, id);
+    deleteP5Element(nodes, 'node' + id);
+
 }
 
 function mouseReleased() {
@@ -162,14 +163,25 @@ function actions(node, interaction) {
     deleteBtn.mousePressed(deleteInteraction);
 }
 
-function deleteP5Element(source, id, posX) {
-    console.log(id);
-    var element = source.filter(x => x.elt.id === id)[0];
+function deleteP5Element(source, id) {
+    var element = selectP5Element(source, id);
+    var currentX = element.x;
     element.remove();
     source.splice(source.indexOf(element), 1);
     lastY = 0;
     for (var i = 0; i < source.length; i++) {
-        source[i].position(posX, lastY);
+        var p5Element = source[i];
+        p5Element.position(p5Element.x, lastY);
         lastY += height * .15;
     }
+}
+
+function modifyP5Element(source, id, newElement) {
+    var element = selectP5Element(source, id);
+    var index = source.indexOf(element);
+    source[index].x = newElement;
+}
+
+function selectP5Element(source, id) {
+    return source.filter(x => x.elt.id === id)[0];
 }
