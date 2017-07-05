@@ -3,6 +3,8 @@ var PlateaTimeline = window.PlateaTimeline;
 var interactions, currentLength;
 var isDraggable, currentSelection;
 var divContainer;
+var buttons = [];
+var nodes = [];
 var lastPos = 0;
 var lastY = 0;
 
@@ -43,45 +45,29 @@ function buttonFactory(interaction) {
     button.mousePressed(actionButton);
     divContainer.child(button);
     button.position(width * .18, lastY);
-    drawInteractions(interactionFactory);
-    currentLength++;
+    buttons.push(button);
+    interactionFactory(interaction);
     lastY += height * .15;
 }
 
 function interactionFactory(interaction) {
-    var placeDiv = createDiv('');
-    placeDiv.id('div' + interaction.id);
-    placeDiv.style('background', interaction.color);
-    placeDiv.style('width', width * .005 + 'px');
-    placeDiv.style('height', height * .15 + 'px');
-    divContainer.child(placeDiv);
-    placeDiv.position(0, lastY);
-
-    var btn = createButton(interaction.name);
-    btn.class('placebutton');
-    btn.id('place' + interaction.id);
-    btn.style('width', width * 0.15 + 'px');
-    btn.style('height', height * .15 + 'px');
-    btn.style('background', 'transparent');
-    divContainer.child(btn);
-    btn.position(width * .005, lastY);
-
-    var deleteBtn = createButton('delete');
-    deleteBtn.class('material-icons');
-    deleteBtn.id('remove' + interaction.id);
-    deleteBtn.style('width', width * 0.025 + 'px');
-    deleteBtn.style('height', height * .15 + 'px');
-    divContainer.child(deleteBtn);
-    deleteBtn.position(width * .155, lastY);
-    deleteBtn.mousePressed(deleteInteraction);
-
+    var node = createDiv('');
+    node.id('node' + interaction.id);
+    node.style('width', width * .18 + 'px');
+    node.style('height', height * .15 + 'px');
+    placeholder(node, interaction);
+    description(node, interaction);
+    actions(node, interaction);
+    node.position(0, lastY);
+    nodes.push(node);
+    divContainer.child(node);
 }
 
 function drawInteractions(fn) {
     interactions = PlateaTimeline.getInteractions();
-    var length = interactions.length;
-    if (length !== 0 && length !== currentLength) {
-        fn(interactions[length - 1]);
+    var len = interactions.length;
+    if (len > buttons.length) {
+        buttonFactory(interactions[len - 1]);
     }
 }
 
@@ -113,18 +99,11 @@ function mouseDragged() {
 
 function deleteInteraction(event) {
     var id = event.srcElement.id;
-    PlateaTimeline.removeInteraction(id);
-    currentLength--;
-    var delBtn = select('#' + id);
     id = id.split('remove')[1];
-    var div = select('#div' + id);
-    var btn = select('#place' + id);
-    var intBtn = select('#' + id);
-    lastY -= height * .15;
-    btn.remove();
-    div.remove();
-    delBtn.remove();
-    intBtn.remove();
+    PlateaTimeline.removeInteraction(id);
+    deleteP5Element(buttons, id, width * .18);
+    deleteP5Element(nodes, 'node' + id, 0);
+    
 }
 
 function mouseReleased() {
@@ -149,4 +128,48 @@ function setCanvas() {
     createCanvas(width, height * .35);
     isDraggable = false;
     textFont("Roboto");
+}
+
+function placeholder(node, interaction) {
+    var placeDiv = createDiv('');
+    placeDiv.id('div' + interaction.id);
+    placeDiv.style('background', interaction.color);
+    placeDiv.style('width', width * .005 + 'px');
+    placeDiv.style('height', height * .15 + 'px');
+    node.child(placeDiv);
+    placeDiv.position(0, 0);
+}
+
+function description(node, interaction) {
+    var btn = createButton(interaction.name);
+    btn.class('placebutton');
+    btn.id('place' + interaction.id);
+    btn.style('width', width * 0.15 + 'px');
+    btn.style('height', height * .15 + 'px');
+    btn.style('background', 'transparent');
+    node.child(btn);
+    btn.position(width * .005, 0);
+}
+
+function actions(node, interaction) {
+    var deleteBtn = createButton('delete');
+    deleteBtn.class('material-icons');
+    deleteBtn.id('remove' + interaction.id);
+    deleteBtn.style('width', width * 0.025 + 'px');
+    deleteBtn.style('height', height * .15 + 'px');
+    node.child(deleteBtn);
+    deleteBtn.position(width * .155, 0);
+    deleteBtn.mousePressed(deleteInteraction);
+}
+
+function deleteP5Element(source, id, posX) {
+    console.log(id);
+    var element = source.filter(x => x.elt.id === id)[0];
+    element.remove();
+    source.splice(source.indexOf(element), 1);
+    lastY = 0;
+    for (var i = 0; i < source.length; i++) {
+        source[i].position(posX, lastY);
+        lastY += height * .15;
+    }
 }
