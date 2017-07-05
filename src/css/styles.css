@@ -1,14 +1,59 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 body{
     margin: 0;
     font-family: Roboto, sans-serif;
 }
 
+button{
+    font-family: Roboto, sans-serif;
+}
+
 .interactionButton {
-    border: none;
+    border: 0.5px solid #212121;
     display: inline-block;
     outline: 0;
+    cursor: pointer;
+}
+
+.placebutton {
+    border-top: 0.5px solid #212121;
+    border-bottom: 0.5px solid #212121;
+    border-left: 0.5px solid #212121;
+    border-right: none;
+    display: inline-block;
+    outline: 0;
+}
+
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+    color: white;
+    border-top: 0.5px solid #212121;
+    border-bottom: 0.5px solid #212121;
+    border-left: none;
+    border-right: 0.5px solid #212121;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'liga';
+    user-select: none;
+    cursor: default;
+    display: inline-block;
+    outline: 0;
+    background: transparent;
+    cursor: pointer;
 }
 
 canvas { 
@@ -18,8 +63,9 @@ canvas {
     z-index:1; 
 }
 
-#container { 
-    overflow: auto;
+#container {
+    overflow-y: scroll;
+    overflow-x: hidden;
     position:relative; 
     z-index:2; 
 }
@@ -27,4 +73,23 @@ canvas {
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.scroll::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #212121;
+}
+
+.scroll::-webkit-scrollbar
+{
+	width: 8px;
+	background-color: #F5F5F5;
+}
+
+.scroll::-webkit-scrollbar-thumb
+{
+	background-color: #616161;
+;
+	border: 2px solid thin #555555;
 }
